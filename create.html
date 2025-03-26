@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD App - Create</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeIn 0.8s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            background: #74ebd5;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background: #5ac1b1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Add New Entry</h2>
+        <form id="create-form">
+            <input type="text" id="name" placeholder="Enter Name" required>
+            <input type="int" id="age" placeholder="Enter Age" required>
+            <input type="text" id="address" placeholder="Enter Address" required>
+            <input type="email" id="email" placeholder="Enter Email" required>
+            <button type="submit" class="btn">Add Entry</button>
+            <button type="Back" class="btn">Back home</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("create-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let name = document.getElementById("name").value;
+            let email = document.getElementById("email").value;
+            
+            let data = JSON.parse(localStorage.getItem("crudData")) || [];
+            data.push({ name, email });
+            localStorage.setItem("crudData", JSON.stringify(data));
+            
+            alert("Entry added successfully!");
+            document.getElementById("create-form").reset();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD App - List</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeIn 0.8s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #74ebd5;
+            color: black;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            background: #74ebd5;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            transition: 0.3s;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+
+        .btn:hover {
+            background: #5ac1b1;
+        }
+
+        /* Back Home Button */
+        .back-home {
+            display: block;
+            width: 150px;
+            margin: 10px auto;
+            padding: 10px;
+            background: #ff6b6b;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-home:hover {
+            background: #e04e4e;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-home">⬅ Back to Home</a>
+
+    <div class="container">
+        <h2>Data List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="data-table-body">
+                <!-- Dynamic data will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const tableBody = document.getElementById("data-table-body");
+            let data = JSON.parse(localStorage.getItem("crudData")) || [];
+            
+            function renderTable() {
+                tableBody.innerHTML = "";
+                data.forEach((item, index) => {
+                    tableBody.innerHTML += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td><input type="text" id="name-${index}" value="${item.name}"></td>
+                            <td><input type="number" id="age-${index}" value="${item.age}"></td>
+                            <td><input type="text" id="address-${index}" value="${item.address}"></td>
+                            <td><input type="email" id="email-${index}" value="${item.email}"></td>
+                            <td>
+                                <button class="btn" onclick="saveUpdate(${index})">Update</button>
+                                <button class="btn" onclick="deleteData(${index})">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            window.deleteData = function(index) {
+                data.splice(index, 1);
+                localStorage.setItem("crudData", JSON.stringify(data));
+                renderTable();
+            }
+
+            window.saveUpdate = function(index) {
+                const updatedName = document.getElementById(`name-${index}`).value;
+                const updatedAge = document.getElementById(`age-${index}`).value;
+                const updatedAddress = document.getElementById(`address-${index}`).value;
+                const updatedEmail = document.getElementById(`email-${index}`).value;
+
+                if (updatedName.trim() === "" || updatedEmail.trim() === "" || updatedAge.trim() === "" || updatedAddress.trim() === "") {
+                    alert("Fields cannot be empty!");
+                    return;
+                }
+                
+                data[index] = { name: updatedName, age: updatedAge, address: updatedAddress, email: updatedEmail };
+                localStorage.setItem("crudData", JSON.stringify(data));
+                alert("Data updated successfully!");
+                renderTable();
+            }
+            
+            renderTable();
+        });
+    </script>
+</body>
+</html>
